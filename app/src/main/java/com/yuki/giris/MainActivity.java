@@ -91,4 +91,41 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
+
+
+        editEmail = findViewById(R.id.editEmail);
+        EditPassword = findViewById(R.id.editPassword);
+        btnKayitOl = findViewById(R.id.btnKayitOl);
+        btnGirisYap = findViewById(R.id.btnGirisYap);
+
+        btnGirisYap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                girisYap(editEmail.getText().toString(), EditPassword.getText().toString());
+            }
+        });
+
+        btnKayitOl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                kayitOl(editEmail.getText().toString(), EditPassword.getText().toString());
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        FirebaseUser currentUser=mAuth.getCurrentUser();
+    }
 }
