@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "776753829623",
+    "project_id": "giris-f2fcd",
+    "storage_bucket": "giris-f2fcd.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:776753829623:android:1f7b9b997f0cadf74f25f2",
+        "android_client_info": {
+          "package_name": "com.yuki.giris"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCdjmtjR9LlUN_nR5-nT7fStD7PzLIFrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
