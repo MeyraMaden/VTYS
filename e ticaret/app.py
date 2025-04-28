@@ -390,3 +390,129 @@ def forgot_password():
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+#E-posta Gönderme İşlevi
+import smtplib
+from email.mime.text import MIMEText
+
+def send_email(to_email, token):
+    try:
+        smtp_server = "smtp.gmail.com"
+        smtp_port = 587
+        sender_email = "h88542708@gmail.com"  # e posta aderisni gir
+        sender_password = "ksakpilvasodfjva"      # E-posta şifreni gir
+
+        # E-posta içeriği
+        subject = "Şifre Sıfırlama İsteği"
+        body = f"Lütfen şifrenizi sıfırlamak için aşağıdaki bağlantıyı kullanın:\n\nhttp://127.0.0.1:5000/reset-password?token={token}"
+
+        msg = MIMEText(body)
+        msg["Subject"] = subject
+        msg["From"] = sender_email
+        msg["To"] = to_email
+
+        # SMTP bağlantısı
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, to_email, msg.as_string())
+        server.quit()
+
+    except Exception as e:
+        print(f"E-posta gönderim hatası: {e}")
+        raise e
+
+#Şifre Sıfırlama Endpoint'i
+@app.route('/reset-password', methods=['POST'])
+def reset_password():
+    try:
+        data = request.get_json()
+        token = data['token']
+        new_password = data['new_password']
+
+        # Token doğrulama
+        decoded_token = validate_jwt(token)
+
+        if "error" in decoded_token:
+            return jsonify(decoded_token), 401
+
+        email = decoded_token['email']
+
+        # Yeni şifreyi hash'le ve MySQL'de güncelle
+        hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE users SET password=%s WHERE email=%s", 
+                    (hashed_password.decode('utf-8'), email))
+        mysql.connection.commit()
+        cur.close()
+
+        return jsonify({"message": "Şifre başarıyla güncellendi!"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+#profil güncelleme endpointi
+@app.route('/update-profile', methods=['PUT'])
+def update_profile():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "Token bulunamadı!"}), 401
+
+    try:
+        token = auth_header.split(" ")[1]
+        decoded_token = validate_jwt(token)
+
+        if "error" in decoded_token:
+            return jsonify(decoded_token), 401
+
+        email = decoded_token['email']  # Token'deki e-posta bilgisini alma
+
+        # Kullanıcının güncellemek istediği bilgiler
+        data = request.get_json()
+        new_email = data.get('email')       # Yeni e-posta
+        new_password = data.get('password') # Yeni şifre
+
+        # En az bir bilgi güncellenmelidir
+        if not ( new_email or new_password):
+            return jsonify({"error": "En az bir alan güncellenmelidir!"}), 400
+
+        # Şifreyi hash'le (eğer şifre güncelleniyorsa)
+        hashed_password = None
+        if new_password:
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+
+        # Veritabanını güncelle
+        cur = mysql.connection.cursor()
+        update_fields = []
+        update_values = []
+
+        
+        if new_email:
+            update_fields.append("email=%s")
+            update_values.append(new_email)
+
+        if hashed_password:
+            update_fields.append("password=%s")
+            update_values.append(hashed_password.decode('utf-8'))
+
+        # Update sorgusunu birleştirme
+        update_query = f"UPDATE users SET {', '.join(update_fields)} WHERE email=%s"
+        update_values.append(email)
+
+        cur.execute(update_query, tuple(update_values))
+        mysql.connection.commit()
+        cur.close()
+
+        return jsonify({"message": "Profil başarıyla güncellendi!"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+if name == 'main':
+    print(app.url_map)
+    app.run(debug=True)
