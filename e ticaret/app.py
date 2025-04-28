@@ -110,3 +110,103 @@ def profile():
     except IndexError:
         return jsonify({"error": "Token formatı hatalı!"}), 400
 
+# Ürün ekleme endpoint'i (Sadece Tedarikçi rolü için)
+@app.route('/add-product', methods=['POST'])
+def add_product():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "Token bulunamadı!"}), 401
+
+    try:
+        token = auth_header.split(" ")[1]
+        decoded_token = validate_jwt(token)
+
+        if "error" in decoded_token:
+            return jsonify(decoded_token), 401
+
+        # Rol kontrolü
+        if decoded_token['role'] != 'supplier':
+            return jsonify({"error": "Bu işlem yalnızca Tedarikçiler için geçerlidir!"}), 403
+
+        data = request.get_json()
+        product_name = data['product_name']
+        price = data['price']
+
+        # MongoDB'ye ürün ekle
+        product_collection.insert_one({
+            "product_name": product_name,
+            "price": price,
+            "added_by": decoded_token['email']
+        })
+
+        return jsonify({"message": "Ürün başarıyla eklendi!"}), 201
+
+    except IndexError:
+        return jsonify({"error": "Token formatı hatalı!"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+#Kullanıcıya Bildirim Gönderme
+def send_email_to_users(user_email, product_name):
+    try:
+        smtp_server = "smtp.gmail.com"
+        smtp_port = 587
+        sender_email = "h88542708@gmail.com"
+        sender_password = "iopkjzuqwmixaxub"# uygulama şifresi kulanarak şifreyi yazdım
+
+        subject = "Sepetinizdeki Ürün Güncellendi"
+        body = f"Merhaba,\n\n'{product_name}' adlı ürün artık stokta bulunmamaktadır ve sepetinizden kaldırılmıştır. Yeni ürünlerimize göz atmayı unutmayın!"
+
+        msg = MIMEText(body)
+        msg["Subject"] = subject
+        msg["From"] = sender_email
+        msg["To"] = user_email
+
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, user_email, msg.as_string())
+        server.quit()
+
+        print("Kullanıcıya bilgilendirme e-postası gönderildi!")
+
+    except Exception as e:
+        print(f"E-posta gönderim hatası: {e}")    
+
+# Sepete ürün ekleme endpoint'i
+@app.route('/add-to-cart', methods=['POST'])
+def add_to_cart():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "Token bulunamadı!"}), 401
+
+    try:
+        token = auth_header.split(" ")[1]
+        decoded_token = validate_jwt(token)
+
+        if "error" in decoded_token:
+            return jsonify(decoded_token), 401
+
+        user_id = decoded_token['email']
+
+        data = request.get_json()
+        product_id = data.get('product_id')
+        quantity = data.get('quantity', 1)
+
+        if not product_id:
+            return jsonify({"error": "Ürün ID'si zorunludur!"}), 400
+
+        cart_collection.insert_one({
+            "user_id": user_id,
+            "product_id": product_id,
+            "quantity": quantity
+        })
+
+        # E-posta bildirimini burada ekledik
+        send_email_to_users(user_id, "Sepetiniz Güncellendi!")
+
+        return jsonify({"message": "Ürün sepete eklendi ve e-posta bildirimi gönderildi!"}), 201
+
+    except IndexError:
+        return jsonify({"error": "Token formatı hatalı!"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
