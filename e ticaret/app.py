@@ -210,3 +210,105 @@ def add_to_cart():
         return jsonify({"error": "Token formatı hatalı!"}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+#a "Siparişiniz Alındı " e-postası göndermek için yeni bir endpoint oluşturuyoruz.
+@app.route('/complete-cart', methods=['POST'])
+def complete_cart():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "Token bulunamadı!"}), 401
+
+    try:
+        token = auth_header.split(" ")[1]
+        decoded_token = validate_jwt(token)
+
+        if "error" in decoded_token:
+            return jsonify(decoded_token), 401
+
+        user_id = decoded_token['email']
+
+        # Sepet tamamlanır (Tüm ürünler "Tamamlandı" olarak işaretlenir)
+        cart_collection.update_many(
+            {"user_id": user_id},
+            {"$set": {"status": "Tamamlandı"}}
+        )
+
+        # E-posta Bildirim Fonksiyonu Çağrılıyor
+        send_email_to_users(user_id, "Siparişiniz Alındı!")
+
+        return jsonify({"message": "Sepet başarıyla tamamlandı ve e-posta bildirimi gönderildi!"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
+
+# Sepeti görüntüleme endpoint'i
+@app.route('/get-cart', methods=['GET'])
+def get_cart():
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "Token bulunamadı!"}), 401
+
+    try:
+        token = auth_header.split(" ")[1]
+        decoded_token = validate_jwt(token)
+
+        if "error" in decoded_token:
+            return jsonify(decoded_token), 401
+
+        user_id = decoded_token['email']
+        cart_items = list(cart_collection.find({"user_id": user_id}))
+
+        for item in cart_items:
+            item['_id'] = str(item['_id'])
+
+        return jsonify({"cart": cart_items}), 200
+
+    except IndexError:
+        return jsonify({"error": "Token formatı hatalı!"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+#Ürün Güncelleme Endpoint'i
+@app.route('/update-product/<product_id>', methods=['PUT'])
+def update_product(product_id):
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "Token bulunamadı!"}), 401
+
+    try:
+        token = auth_header.split(" ")[1]
+        decoded_token = validate_jwt(token)
+
+        if "error" in decoded_token:
+            return jsonify(decoded_token), 401
+
+        # Rol kontrolü
+        if decoded_token['role'] != 'supplier':
+            return jsonify({"error": "Bu işlem yalnızca Tedarikçiler için geçerlidir!"}), 403
+
+        # Güncelleme için gerekli veriler
+        data = request.get_json()
+        product_name = data.get('product_name')
+        price = data.get('price')
+
+        if not product_name or not price:
+            return jsonify({"error": "Ürün adı ve fiyat zorunludur!"}), 400
+
+        # MongoDB'de ürünü güncelle
+        result = product_collection.update_one(
+            {"_id": product_id},
+            {"$set": {"product_name": product_name, "price": price}}
+        )
+
+        if result.modified_count == 0:
+            return jsonify({"error": "Ürün bulunamadı veya güncellenemedi!"}), 404
+
+        return jsonify({"message": "Ürün başarıyla güncellendi!"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
