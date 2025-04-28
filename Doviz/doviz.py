@@ -36,3 +36,24 @@ def write_data():
     
         # Zaman damgası, milisaniye cinsinden
         timestamp = int(time.time() * 1000)  # time.time() saniye , milisaniye için * 1000 yapılır
+
+        # InfluxDB'ye veri ekleme
+        point = Point("forex_rate") \
+            .tag("currency_pair", "EUR/TRY") \
+            .field("rate", euro_to_try) \
+            .time(timestamp, WritePrecision.MS)  # MS milisaniye
+
+        try:
+            # Veriyi InfluxDB'ye yaz
+            write_api.write(bucket=bucket, org=org, record=point)
+            print(f"Veri InfluxDB'ye kaydedildi: 1 Euro = {euro_to_try} TRY")
+        except Exception as e:
+                print(f"Veri yazılırken hata oluştu: {e}")
+    else:
+            print("API'den alınan veriler geçersiz.")
+
+                
+# Sürekli veri alıp kaydetme
+while True:
+    write_data()
+    time.sleep(30) # 30 saniye
