@@ -312,3 +312,81 @@ def update_product(product_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+#Ürün Silme Endpoint'i
+@app.route('/delete-product/<product_id>', methods=['DELETE'])
+def delete_product(product_id):
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        return jsonify({"error": "Token bulunamadı!"}), 401
+
+    try:
+        token = auth_header.split(" ")[1]
+        decoded_token = validate_jwt(token)
+
+        if "error" in decoded_token:
+            return jsonify(decoded_token), 401
+
+        # Rol kontrolü
+        if decoded_token['role'] != 'supplier':
+            return jsonify({"error": "Bu işlem yalnızca Tedarikçiler için geçerlidir!"}), 403
+
+        # MongoDB'de ürünü soft-delete ile işaretle
+        result = product_collection.update_one(
+            {"_id":  ObjectId(product_id)},
+            {"$set": {"is_deleted": True}}  # Soft-delete işaretlemesi
+        )
+
+        if result.modified_count == 0:
+            return jsonify({"error": "Ürün bulunamadı veya silinemedi!"}), 404
+
+        return jsonify({"message": "Ürün başarıyla silindi (Soft-delete)!"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+#Etkilenen Kullanıcıları Bulma ve Güncelleme
+def notify_users(product_id):
+    # MongoDB'deki sepetlerde etkilenen kullanıcıları bul
+    affected_carts = cart_collection.find({"product_id": product_id})
+
+    for cart in affected_carts:
+        # Kullanıcıya bildirim gönder
+        user_id = cart["user_id"]
+        print(f"Kullanıcının sepetinde etkilenen ürün var: {user_id}")
+
+        # Sepetteki ürün miktarını sıfırla veya mesaj ekleme 
+        cart_collection.update_one(
+            {"_id": cart["_id"]},
+            {"$set": {"status": "Ürün artık mevcut değil"}}
+        )
+
+
+
+
+
+@app.route('/forgot-password', methods=['POST'])
+def forgot_password():
+    try:
+        data = request.get_json()
+        email = data['email']
+
+        # Kullanıcıyı MySQL'de kontrol et
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM users WHERE email=%s", (email,))
+        user = cur.fetchone()
+        cur.close()
+
+        if not user:
+            return jsonify({"error": "Kullanıcı bulunamadı!"}), 404
+
+        # Şifre sıfırlama token'i oluştur
+        reset_token = generate_jwt(email, "password_reset")  # Token'e "password_reset" rolü
+
+        # E-posta ile token gönder
+        send_email(email, reset_token)
+
+        return jsonify({"message": "Şifre sıfırlama bağlantısı e-posta ile gönderildi!"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
