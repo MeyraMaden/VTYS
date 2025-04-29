@@ -1,7 +1,0 @@
-
-
-from(bucket: "influxBucket")
-  |> range(start: -1h)  // Son 1 saatteki verileri sorgula
-  |> filter(fn: (r) => r["_measurement"] == "forex_rate" and r["currency_pair"] == "EUR/TRY")
-  |> filter(fn: (r) => r["_field"] == "rate")
-  |> yield(name: "mean")
