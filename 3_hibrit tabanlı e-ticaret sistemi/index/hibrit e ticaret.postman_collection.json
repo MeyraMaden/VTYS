@@ -1,0 +1,534 @@
+{
+	"info": {
+		"_postman_id": "c2ad9e83-3d43-454f-aaea-fd184c83f94b",
+		"name": "hibrit e ticaret",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44408582",
+		"_collection_link": "https://helin-8931737.postman.co/workspace/helin's-Workspace~38c70e17-e7a4-4474-82a6-b2daec33719f/collection/44408582-c2ad9e83-3d43-454f-aaea-fd184c83f94b?action=share&source=collection_link&creator=44408582"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"helinnbaglamis@gmail.com\",\r\n    \"password\":\"123456\",\r\n    \"role\": \"customer\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/register",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"meyryhgfaa@gmail.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "profile",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1leXJ5aGdmYWFAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNzQ4ODg4NzUzLCJpYXQiOjE3NDgyODM5NTN9.Fba9FbJwK85W6_fiTlpx-qr1_Vy1Ycdxjw9vX2aeO6A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/profile",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "suplier register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"meyrahgasmaden@gmail.com\",\r\n    \"password\": \"3131\",\r\n    \"role\": \"Supplier\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/register",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get cart",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1leXJ5aGdmYWFAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNzQ4ODg4NzUzLCJpYXQiOjE3NDgyODM5NTN9.Fba9FbJwK85W6_fiTlpx-qr1_Vy1Ycdxjw9vX2aeO6A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/get-cart",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"get-cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add product",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1leXJhaGdhc21hZGVuQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBwbGllciIsImV4cCI6MTc0ODg4OTc0MywiaWF0IjoxNzQ4Mjg0OTQzfQ.8JqcUg8iLILCCF850DCIfJPHExfC5NzTrSS0eyquofg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"product_name\": \"havlu\",\r\n    \"price\": 148\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/add-product",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"add-product"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add-to-cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1leXJ5aGdmYWFAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNzQ4ODg4NzUzLCJpYXQiOjE3NDgyODM5NTN9.Fba9FbJwK85W6_fiTlpx-qr1_Vy1Ycdxjw9vX2aeO6A",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"product_id\": \"6834b62c95436a6b6db8920c\",\r\n    \"quantity\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/add-to-cart",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"add-to-cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-product",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1leXJhaGdhc21hZGVuQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBwbGllciIsImV4cCI6MTc0ODg4OTc0MywiaWF0IjoxNzQ4Mjg0OTQzfQ.8JqcUg8iLILCCF850DCIfJPHExfC5NzTrSS0eyquofg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"product_name\": \"kulaklık\",\r\n    \"price\": 159\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/update-product/6834b62c95436a6b6db8920c",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"update-product",
+						"6834b62c95436a6b6db8920c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "forget password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"helinnbaglamis@gmail.com\"\r\n\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/forgot-password",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"forgot-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reset pasword",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhlbGlubmJhZ2xhbWlzQGdtYWlsLmNvbSIsInJvbGUiOiJwYXNzd29yZF9yZXNldCIsImV4cCI6MTc0ODg4OTU0MSwiaWF0IjoxNzQ4Mjg0NzQxfQ.yDE5o8xJD2FKETvshtZtnY1j9V0EASIiDCMyJ_EvRaY\",\r\n\r\n    \"new_password\": \"YeniiSifre123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/reset-password",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"reset-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete product",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1leXJhaGdhc21hZGVuQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBwbGllciIsImV4cCI6MTc0ODg4OTc0MywiaWF0IjoxNzQ4Mjg0OTQzfQ.8JqcUg8iLILCCF850DCIfJPHExfC5NzTrSS0eyquofg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/delete-product/6834b62c95436a6b6db8920c",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"delete-product",
+						"6834b62c95436a6b6db8920c"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "suplier login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n     \"email\": \"meyrahgasmaden@gmail.com\",\r\n     \"password\": \"3131\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "suplier login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "Ber",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"meyrahasmaden@gmail.com\",\r\n    \"password\":3131\r\n}\r\n"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/login",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list_products",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1leXJhaGdhc21hZGVuQGdtYWlsLmNvbSIsInJvbGUiOiJzdXBwbGllciIsImV4cCI6MTc0ODg4OTc0MywiaWF0IjoxNzQ4Mjg0OTQzfQ.8JqcUg8iLILCCF850DCIfJPHExfC5NzTrSS0eyquofg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/list-products",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"list-products"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "complete_cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1leXJ5aGdmYWFAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNzQ4ODg4NzUzLCJpYXQiOjE3NDgyODM5NTN9.Fba9FbJwK85W6_fiTlpx-qr1_Vy1Ycdxjw9vX2aeO6A",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:5000/complete-cart",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"complete-cart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_from_cart",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1leXJ5aGdmYWFAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiZXhwIjoxNzQ4ODg4NzUzLCJpYXQiOjE3NDgyODM5NTN9.Fba9FbJwK85W6_fiTlpx-qr1_Vy1Ycdxjw9vX2aeO6A",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"product_id\":\"6834b62c95436a6b6db8920c\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/delete-from-cart",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"delete-from-cart"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

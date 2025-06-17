@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ana Sayfa</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+    .controls {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 6px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+   
+    <button id="to-profile">Profilim</button>
+    <button id="to-cart">Sepetim</button>
+    <button id="logout">Çıkış Yap</button>
+  </nav>
+
+  <h1>Ürünler</h1>
+
+  <div id="products-list" class="grid"></div>
+
+  <!-- Ürün Ekleme formu tüm kullanıcılara gösterilir, ancak sadece supplier ve sahibi yetki alır -->
+  <div id="supplier-actions" style="display:none; margin-top: 20px;">
+    <h2>Yeni Ürün Ekle</h2>
+    <form id="new-product-form">
+      <input type="text" name="product_name" placeholder="Ürün Adı" required />
+      <input type="number" name="price" placeholder="Fiyat" required />
+      <button type="submit">Ürün Ekle</button>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
